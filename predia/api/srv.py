@@ -11,7 +11,7 @@ model = joblib.load('model.pkl')
 
 @app.route('/')
 def display_gui():
-    return render_template('template.html')
+    return render_template('templates/template.html')
 
 @app.route('/verificar', methods=['POST'])
 def verificar():
@@ -34,10 +34,10 @@ def verificar():
 	print("Valor do emprestimo: {}".format(valoremprestimo))
 	print("\n")
 
-	classe = model.predict(teste)[0]
-	print("Classe Predita: {}".format(str(classe)))
+	qtd_almoco = model.predict(teste)[0]
+	print("Quantidade de Almoço: {}".format(str(qtd_almoco)))
 
-	return render_template('template.html',classe=str(classe))
+	return render_template('template.html',qtd_almoco=str(qtd_almoco))
 
 if __name__ == "__main__":
         port = int(os.environ.get('PORT', 5500))

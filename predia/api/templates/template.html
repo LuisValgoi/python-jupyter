@@ -20,11 +20,85 @@
   </head>
   <body>
     <div class="container">
-      <h1>PREDIA - Previsão de Almoços</h1>
+      <br />
 
       <form action="/verificar" method="post">
-        <h5>A data que vode deseja prever:</h5>
+        <h5>Fatores Histórico:</h5>
         <br />
+
+        <!-- VENDAS_ONTEM -->
+        <div class="form-group row">
+          <label for="rendimendo" class="col-sm-6 col-form-label"
+            >Quanto foi vendido ontem ?</label
+          >
+          <div class="col-sm-2">
+            <input
+              type="value"
+              class="form-control"
+              id="VENDAS_ONTEM"
+              value="0"
+              name="VENDAS_ONTEM"
+            />
+          </div>
+        </div>
+
+        <h5>Fatores da Concorrência:</h5>
+        <br />
+
+        <!-- QTD_CONCORRENTES -->
+        <div class="form-group row">
+          <label for="rendimendo" class="col-sm-6 col-form-label"
+            >Quantos concorrentes estarão aberto ?</label
+          >
+          <div class="col-sm-2">
+            <input
+              type="value"
+              class="form-control"
+              id="QTD_CONCORRENTES"
+              value="0"
+              name="QTD_CONCORRENTES"
+            />
+          </div>
+        </div>
+
+        <h5>Fatores de Natureza:</h5>
+        <br />
+
+        <!-- TEMPERATURA -->
+        <div class="form-group row">
+          <label for="rendimendo" class="col-sm-6 col-form-label"
+            >Qual a previsão da temperatura (em °C) ?</label
+          >
+          <div class="col-sm-2">
+            <input
+              type="value"
+              class="form-control"
+              id="TEMPERATURA"
+              value="0"
+              name="TEMPERATURA"
+            />
+          </div>
+        </div>
+
+        <!-- UMIDADE -->
+        <div class="form-group row">
+          <label for="rendimendo" class="col-sm-6 col-form-label"
+            >Qual a previsão de umidade ?</label
+          >
+          <div class="col-sm-2">
+            <input
+              type="value"
+              class="form-control"
+              id="UMIDADE"
+              value="0"
+              name="UMIDADE"
+            />
+          </div>
+        </div>
+
+        <h5>Fatores do Local:</h5>
+        <br />
+
         <!-- DATA_FESTIVA -->
         <fieldset class="form-group">
           <div class="row">
@@ -121,103 +195,37 @@
           </div>
         </fieldset>
 
-        <h5>Na data que vode deseja prever:</h5>
-        <br />
-        <!-- QTD_CONCORRENTES -->
-        <div class="form-group row">
-          <label for="rendimendo" class="col-sm-6 col-form-label"
-            >Quantos concorrentes estarão aberto ?</label
-          >
-          <div class="col-sm-2">
-            <input
-              type="value"
-              class="form-control"
-              id="QTD_CONCORRENTES"
-              value="0"
-              name="QTD_CONCORRENTES"
-            />
+        <!-- ALTA_TEMPORADA -->
+        <fieldset class="form-group">
+          <div class="row">
+            <legend class="col-form-label col-sm-6 pt-0">
+              Será uma data de alta temporada (Março à Dezembro) ?
+            </legend>
+            <div class="col-sm-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="ALTA_TEMPORADA"
+                  id="gridRadios1"
+                  value="1"
+                  checked
+                />
+                <label class="form-check-label" for="gridRadios1"> Sim </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="ALTA_TEMPORADA"
+                  id="gridRadios2"
+                  value="0"
+                />
+                <label class="form-check-label" for="gridRadios2"> Não </label>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <!-- VENDAS_MEDIA_MES -->
-        <div class="form-group row">
-          <label for="rendimendo" class="col-sm-6 col-form-label"
-            >Qual foi a media de vendas no mês ?</label
-          >
-          <div class="col-sm-2">
-            <input
-              type="value"
-              class="form-control"
-              id="VENDAS_MEDIA_MES"
-              value="0"
-              name="VENDAS_MEDIA_MES"
-            />
-          </div>
-        </div>
-
-        <!-- VENDAS_MEDIA_TRIM -->
-        <div class="form-group row">
-          <label for="rendimendo" class="col-sm-6 col-form-label"
-            >Qual foi a media de vendas no trimestre ?</label
-          >
-          <div class="col-sm-2">
-            <input
-              type="value"
-              class="form-control"
-              id="VENDAS_MEDIA_TRIM"
-              value="0"
-              name="VENDAS_MEDIA_TRIM"
-            />
-          </div>
-        </div>
-
-        <!-- VENDAS_ONTEM -->
-        <div class="form-group row">
-          <label for="rendimendo" class="col-sm-6 col-form-label"
-            >Quantos almoços foram vendidos ontem ?</label
-          >
-          <div class="col-sm-2">
-            <input
-              type="value"
-              class="form-control"
-              id="VENDAS_ONTEM"
-              value="0"
-              name="VENDAS_ONTEM"
-            />
-          </div>
-        </div>
-
-        <!-- VENDAS_STD_MES -->
-        <div class="form-group row">
-          <label for="rendimendo" class="col-sm-6 col-form-label"
-            >Qual foi o desvio padrão do mês ?</label
-          >
-          <div class="col-sm-2">
-            <input
-              type="value"
-              class="form-control"
-              id="VENDAS_STD_MES"
-              value="0"
-              name="VENDAS_STD_MES"
-            />
-          </div>
-        </div>
-
-        <!-- VENDAS_STD_TRIM -->
-        <div class="form-group row">
-          <label for="rendimendo" class="col-sm-6 col-form-label"
-            >Qual foi o desvio padrão do trimestre ?</label
-          >
-          <div class="col-sm-2">
-            <input
-              type="value"
-              class="form-control"
-              id="VENDAS_STD_TRIM"
-              value="0"
-              name="VENDAS_STD_TRIM"
-            />
-          </div>
-        </div>
+        </fieldset>
 
         <!-- VERIFICAR -->
         <div class="form-group row">
@@ -227,7 +235,7 @@
         </div>
       </form>
 
-      <h3>Amanhã será vendido: {% qtd_almoco %} almoço</h3>
+      <h3>Amanhã será vendido: {% qtd_almoco %} almoços</h3>
     </div>
 
     <script

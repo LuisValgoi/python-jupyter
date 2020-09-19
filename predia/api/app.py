@@ -259,7 +259,7 @@ html = """
 """
 st.markdown(html, unsafe_allow_html=True)
 
-# st.sidebar.title("Defina os fatores para predição")
+st.sidebar.title("Simule uma predição")
 st.sidebar.subheader("Fatores Histórico")
 VENDAS_ONTEM = st.sidebar.number_input("Quantos almoços foram vendidos ontem?", value=int(data.VENDAS_ONTEM.mean()), step=1)
 st.sidebar.subheader("Fatores da Concorrência")
@@ -286,8 +286,6 @@ btn_predict = st.sidebar.button("Realizar Predição")
 
 # verifica se o botão foi acionado
 if btn_predict:
-    scaler = preprocessing.MinMaxScaler()
-
     # lstm_features = []
     # lstm_features.append(DATA_FESTIVA)
     # lstm_features.append(FERIADO)
@@ -296,14 +294,25 @@ if btn_predict:
     # lstm_features.append(VENDAS_ONTEM)
     # lstm_y_pred = LSTM.predict(scaler.transform([lstm_features])).round().astype(int)[0]
 
+    x = data.drop(columns=get_features_to_drop_gb(), axis=1)
+    y = data["VENDAS"]
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.05, random_state=1, shuffle=False)
+    scaler = preprocessing.MinMaxScaler()
+    scaler.fit_transform(X_train)
     gb_features = []
     gb_features.append(ALTA_TEMPORADA)
     gb_features.append(DATA_FESTIVA)
     gb_features.append(FERIADO)
     gb_features.append(QTD_CONCORRENTES)
     gb_features.append(VENDAS_ONTEM)
-    gb_y_pred = GB.predict([gb_features]).round().astype(int)[0]
+    gb_features = scaler.transform([gb_features])
+    gb_y_pred = GB.predict(gb_features).round().astype(int)[0]
 
+    x = data.drop(columns=get_features_to_drop_mlp(), axis=1)
+    y = data["VENDAS"]
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.05, random_state=1, shuffle=False)
+    scaler = preprocessing.MinMaxScaler()
+    scaler.fit_transform(X_train)
     mlp_features = []
     mlp_features.append(DATA_FESTIVA)
     mlp_features.append(FERIADO)
@@ -311,7 +320,8 @@ if btn_predict:
     mlp_features.append(TEMPERATURA)
     mlp_features.append(UMIDADE)
     mlp_features.append(VENDAS_ONTEM)
-    mlp_y_pred = MLP.predict([mlp_features]).round().astype(int)[0]
+    mlp_features = scaler.transform([mlp_features])
+    mlp_y_pred = MLP.predict(mlp_features).round().astype(int)[0]
 
     qtd_almoco_ensemble = (gb_y_pred + mlp_y_pred) / 2
 

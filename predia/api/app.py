@@ -158,7 +158,7 @@ MLP = train_model_mlp()
 # título
 st.title("PREDIA – Modelo Híbrido Multifatorial")
 # subtítulo
-st.markdown("App utilizado para exibir a solução de Machine Learning construíoda para a predição de almoços do Restaurante Nostra Bréscia.")
+st.markdown("App utilizado para exibir a solução de Machine Learning construída para a predição de almoços do Restaurante Nostra Bréscia.")
 
 ########################################################################
 

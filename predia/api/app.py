@@ -15,6 +15,13 @@ from keras.layers import LSTM
 from keras.layers import Dropout
 from keras.wrappers.scikit_learn import KerasRegressor
 
+st.beta_set_page_config(
+	layout="wide",
+	initial_sidebar_state="expanded",
+	page_title='PREDIA – Modelo Híbrido Multifatorial',
+	page_icon=None,
+)
+
 # função para carregar o dataset
 @st.cache
 def get_data():
@@ -23,7 +30,7 @@ def get_data():
 
 # função para retornar as colunas necessarias para o lstm
 def get_features_to_drop_lstm():
-      return ['DATA', 'VENDAS', 'SEMANA_PAGAMENTO', 'PRECIPITACAO', 'TEMPERATURA', 'POS_DATA_FESTIVA', 'FDS', 'VESPERA_DATA_FESTIVA', 'ALTA_TEMPORADA'];
+    return ['DATA', 'VENDAS', 'SEMANA_PAGAMENTO', 'PRECIPITACAO', 'TEMPERATURA', 'POS_DATA_FESTIVA', 'FDS', 'VESPERA_DATA_FESTIVA', 'ALTA_TEMPORADA']
 
 # funcao para retornar o modelo base de lstm
 def get_base_model_lstm():
@@ -69,26 +76,27 @@ def train_model_lstm():
 
 # função para retornar as colunas necessarias para o gb
 def get_features_to_drop_gb():
-      return ['DATA', 'VENDAS', 'SEMANA_PAGAMENTO', 'PRECIPITACAO', 'FDS', 'UMIDADE', 'TEMPERATURA', 'VESPERA_DATA_FESTIVA', 'FDS', 'UMIDADE', 'TEMPERATURA', 'VESPERA_DATA_FESTIVA', 'POS_DATA_FESTIVA'];
+    return ['DATA', 'VENDAS', 'SEMANA_PAGAMENTO', 'PRECIPITACAO', 'FDS', 'UMIDADE', 'TEMPERATURA', 'VESPERA_DATA_FESTIVA', 'FDS', 'UMIDADE', 'TEMPERATURA', 'VESPERA_DATA_FESTIVA', 'POS_DATA_FESTIVA']
 
 # função para treinar o modelo gb
 def train_model_gb():
     # separa o dataset em treino e teste
     data = get_data()
-    x = data.drop(columns=get_features_to_drop_gb(),axis=1)
+    x = data.drop(columns=get_features_to_drop_gb(), axis=1)
     y = data["VENDAS"]
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.05, random_state=1, shuffle=False)
+    X_train, X_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.05, random_state=1, shuffle=False)
 
     # instancia o modelo
     gb_regressor = GradientBoostingRegressor(alpha=0.9, ccp_alpha=0.0, criterion='mse', init=None,
-                          learning_rate=0.1, loss='ls', max_depth=25,
-                          max_features=None, max_leaf_nodes=None,
-                          min_impurity_decrease=0.0, min_impurity_split=None,
-                          min_samples_leaf=21, min_samples_split=16,
-                          min_weight_fraction_leaf=0.0, n_estimators=139,
-                          n_iter_no_change=None, presort='deprecated',
-                          random_state=1, subsample=1.0, tol=0.0001,
-                          validation_fraction=0.1, verbose=0, warm_start=False)
+                                             learning_rate=0.1, loss='ls', max_depth=25,
+                                             max_features=None, max_leaf_nodes=None,
+                                             min_impurity_decrease=0.0, min_impurity_split=None,
+                                             min_samples_leaf=21, min_samples_split=16,
+                                             min_weight_fraction_leaf=0.0, n_estimators=139,
+                                             n_iter_no_change=None, presort='deprecated',
+                                             random_state=1, subsample=1.0, tol=0.0001,
+                                             validation_fraction=0.1, verbose=0, warm_start=False)
 
     # realiza o feature scaling
     scaler = preprocessing.MinMaxScaler()
@@ -103,25 +111,26 @@ def train_model_gb():
 
 # função para retornar as colunas necessarias para o mlp
 def get_features_to_drop_mlp():
-      return ['DATA', 'VENDAS', 'SEMANA_PAGAMENTO', 'PRECIPITACAO', 'QTD_CONCORRENTES', 'VESPERA_DATA_FESTIVA', 'FDS', 'QTD_CONCORRENTES', 'VESPERA_DATA_FESTIVA', 'FDS', 'ALTA_TEMPORADA'];
+    return ['DATA', 'VENDAS', 'SEMANA_PAGAMENTO', 'PRECIPITACAO', 'QTD_CONCORRENTES', 'VESPERA_DATA_FESTIVA', 'FDS', 'QTD_CONCORRENTES', 'VESPERA_DATA_FESTIVA', 'FDS', 'ALTA_TEMPORADA']
 
 # função para treinar o modelo mlp
 def train_model_mlp():
     # separa o dataset em treino e teste
     data = get_data()
-    x = data.drop(columns=get_features_to_drop_mlp(),axis=1)
+    x = data.drop(columns=get_features_to_drop_mlp(), axis=1)
     y = data["VENDAS"]
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.05, random_state=1, shuffle=False)
+    X_train, X_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.05, random_state=1, shuffle=False)
 
     # instancia o modelo
     mlp_regressor = MLPRegressor(activation='identity', alpha=0.0001, batch_size=300, beta_1=0.9,
-             beta_2=0.999, early_stopping=True, epsilon=1e-08,
-             hidden_layer_sizes=(149), learning_rate='constant',
-             learning_rate_init=0.001, max_fun=15000, max_iter=100,
-             momentum=0.9, n_iter_no_change=10, nesterovs_momentum=True,
-             power_t=0.5, random_state=1, shuffle=False, solver='lbfgs',
-             tol=0.0001, validation_fraction=0.1, verbose=False,
-             warm_start=True)
+                                 beta_2=0.999, early_stopping=True, epsilon=1e-08,
+                                 hidden_layer_sizes=(149), learning_rate='constant',
+                                 learning_rate_init=0.001, max_fun=15000, max_iter=100,
+                                 momentum=0.9, n_iter_no_change=10, nesterovs_momentum=True,
+                                 power_t=0.5, random_state=1, shuffle=False, solver='lbfgs',
+                                 tol=0.0001, validation_fraction=0.1, verbose=False,
+                                 warm_start=True)
 
     # realiza o feature scaling
     scaler = preprocessing.MinMaxScaler()
@@ -133,6 +142,8 @@ def train_model_mlp():
 
     # retorna
     return mlp_regressor
+
+########################################################################
 
 # criando um dataframe
 data = get_data()
@@ -153,32 +164,102 @@ st.markdown("App utilizado para exibir a solução de Machine Learning construí
 
 # verificando o dataset
 st.subheader("Selecionando apenas um pequeno conjunto de atributos")
-# atributos para serem exibidos por padrão
-defaultcols = ['DATA', 'VENDAS', 'FDS', 'DATA_FESTIVA', 'VESPERA_DATA_FESTIVA', 'POS_DATA_FESTIVA', 'FERIADO', 'SEMANA_PAGAMENTO', 'ALTA_TEMPORADA', 'QTD_CONCORRENTES', 'PRECIPITACAO', 'TEMPERATURA', 'UMIDADE', 'VENDAS_ONTEM']
-# defindo atributos a partir do multiselect
-cols = st.multiselect("Atributos", data.columns.tolist(), default=defaultcols)
-# exibindo os top 10 registro do dataframe
+allcols = ['DATA', 'VENDAS', 'FDS', 'DATA_FESTIVA', 'VESPERA_DATA_FESTIVA', 'POS_DATA_FESTIVA', 'FERIADO', 'ALTA_TEMPORADA', 'QTD_CONCORRENTES', 'TEMPERATURA', 'UMIDADE', 'VENDAS_ONTEM']
+defaultcols = ['DATA', 'VENDAS', 'FDS', 'DATA_FESTIVA', 'FERIADO', 'ALTA_TEMPORADA', 'QTD_CONCORRENTES', 'TEMPERATURA', 'VENDAS_ONTEM']
+cols = st.multiselect("Atributos", allcols, default=defaultcols)
 st.dataframe(data[cols].head(10))
 
 ########################################################################
 
+# plot a distribuição dos dados
 st.subheader("Distribuição vendas por período")
-# definindo a faixa de valores
 faixa_valores = st.slider("Faixa de Vendas de Almoços", int(data.VENDAS.min()), int(data.VENDAS.max()), (100, 150))
-# filtrando os dados
 dados = data[data['VENDAS'].between(left=faixa_valores[0], right=faixa_valores[1])]
 
-########################################################################
-
-# plot a distribuição dos dados
-f = px.histogram(dados, x="DATA", y="VENDAS", nbins=100, title="Distribuição de Vendas de Almoço")
-f.update_xaxes(title="Período")
-f.update_yaxes(title="Total de Almoços Vendidos")
-st.plotly_chart(f)
+f1 = px.histogram(dados, x="DATA", y="VENDAS", nbins=100,title="Distribuição de Vendas de Almoço")
+f1.update_xaxes(title="Período")
+f1.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f1)
 
 ########################################################################
 
-st.sidebar.title("Defina os fatores para predição")
+# plot a relação de VENDAS x FERIADO
+st.subheader("Relação de Almoços Vendidos por Quantidade de Concorrentes Abertos")
+f7 = px.box(dados, x="QTD_CONCORRENTES", y="VENDAS",color="QTD_CONCORRENTES", notched=True)
+f7.update_xaxes(title="Quantidade de Concorrentes Abertos")
+f7.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f7)
+
+########################################################################
+
+# plot a relação de VENDAS x FERIADO
+st.subheader("Relação de Almoços Vendidos por Temperatura")
+f8 = px.box(dados, x="TEMPERATURA", y="VENDAS",color="TEMPERATURA", notched=True)
+f8.update_xaxes(title="Temperatura")
+f8.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f8)
+
+########################################################################
+
+# plot a relação de VENDAS x FDS
+st.subheader("Relação de Almoços Vendidos por Finais de Semanas")
+f2 = px.box(dados, x="FDS", y="VENDAS", color="FDS", notched=True)
+f2.update_xaxes(title="Finais de Semana")
+f2.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f2)
+
+########################################################################
+
+# plot a relação de VENDAS x FERIADO
+st.subheader("Relação de Almoços Vendidos por Feriados")
+f3 = px.box(dados, x="FERIADO", y="VENDAS",color="FERIADO", notched=True)
+f3.update_xaxes(title="Feriados")
+f3.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f3)
+
+########################################################################
+
+# plot a relação de VENDAS x VESPERA_DATA_FESTIVA
+st.subheader("Relação de Almoços Vendidos por Vésperas de Datas Festivas")
+f4 = px.box(dados, x="VESPERA_DATA_FESTIVA", y="VENDAS",color="VESPERA_DATA_FESTIVA", notched=True)
+f4.update_xaxes(title="Vésperas de Datas Festivas")
+f4.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f4)
+
+########################################################################
+
+# plot a relação de VENDAS x POS_DATA_FESTIVA
+st.subheader("Relação de Almoços Vendidos por Dias Após Datas Festivas")
+f5 = px.box(dados, x="POS_DATA_FESTIVA", y="VENDAS",color="POS_DATA_FESTIVA", notched=True)
+f5.update_xaxes(title="Dias Após Datas Festivas")
+f5.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f5)
+
+########################################################################
+
+# plot a relação de VENDAS x FERIADO
+st.subheader("Relação de Almoços Vendidos por Alta Temporada")
+f6 = px.box(dados, x="ALTA_TEMPORADA", y="VENDAS",color="ALTA_TEMPORADA", notched=True)
+f6.update_xaxes(title="Alta Temporada")
+f6.update_yaxes(title="Almoços Vendidos")
+st.plotly_chart(f6)
+
+########################################################################
+
+html = """
+  <style>
+    .sidebar .sidebar-content {
+        padding: 2rem 1rem;
+    }
+
+    .reportview-container .main .block-container {
+        padding: 2rem 1rem 10rem;
+    }
+  </style>
+"""
+st.markdown(html, unsafe_allow_html=True)
+
+# st.sidebar.title("Defina os fatores para predição")
 st.sidebar.subheader("Fatores Histórico")
 VENDAS_ONTEM = st.sidebar.number_input("Quantos almoços foram vendidos ontem?", value=int(data.VENDAS_ONTEM.mean()), step=1)
 st.sidebar.subheader("Fatores da Concorrência")
@@ -187,10 +268,10 @@ st.sidebar.subheader("Fatores de Natureza")
 TEMPERATURA = st.sidebar.number_input("Qual a previsão de temperatura (em °C)?", value=int(data.TEMPERATURA.mean()), step=5)
 UMIDADE = st.sidebar.number_input("Qual a previsão de umidade?", value=int(data.UMIDADE.mean()), step=5)
 st.sidebar.subheader("Fatores do Local")
-FERIADO = st.sidebar.selectbox("Será um feriado?",("Sim","Não"))
-ALTA_TEMPORADA = st.sidebar.selectbox("Será uma data de alta temporada (Março à Dezembro) ?",("Sim","Não"))
-DATA_FESTIVA = st.sidebar.selectbox("Será uma data festiva?",("Sim","Não"))
-POS_DATA_FESTIVA = st.sidebar.selectbox("Será após uma data festiva?",("Sim","Não"))
+FERIADO = st.sidebar.selectbox("Será um feriado?", ("Sim", "Não"))
+ALTA_TEMPORADA = st.sidebar.selectbox("Será uma data de alta temporada (Março à Dezembro) ?", ("Sim", "Não"))
+DATA_FESTIVA = st.sidebar.selectbox("Será uma data festiva?", ("Sim", "Não"))
+POS_DATA_FESTIVA = st.sidebar.selectbox("Será após uma data festiva?", ("Sim", "Não"))
 
 # transformando o dado de entrada em valor binário
 FERIADO = 1 if FERIADO == "Sim" else 0
@@ -198,10 +279,10 @@ ALTA_TEMPORADA = 1 if ALTA_TEMPORADA == "Sim" else 0
 DATA_FESTIVA = 1 if DATA_FESTIVA == "Sim" else 0
 POS_DATA_FESTIVA = 1 if POS_DATA_FESTIVA == "Sim" else 0
 
+########################################################################
+
 # inserindo um botão na tela
 btn_predict = st.sidebar.button("Realizar Predição")
-
-########################################################################
 
 # verifica se o botão foi acionado
 if btn_predict:
@@ -221,7 +302,7 @@ if btn_predict:
     gb_features.append(FERIADO)
     gb_features.append(QTD_CONCORRENTES)
     gb_features.append(VENDAS_ONTEM)
-    gb_y_pred = GB.predict(scaler.transform([gb_features])).round().astype(int)[0]
+    gb_y_pred = GB.predict([gb_features]).round().astype(int)[0]
 
     mlp_features = []
     mlp_features.append(DATA_FESTIVA)
@@ -230,13 +311,9 @@ if btn_predict:
     mlp_features.append(TEMPERATURA)
     mlp_features.append(UMIDADE)
     mlp_features.append(VENDAS_ONTEM)
-    mlp_y_pred = MLP.predict(scaler.transform([mlp_features])).round().astype(int)[0]
+    mlp_y_pred = MLP.predict([mlp_features]).round().astype(int)[0]
 
-    # qtd_almoco_lstm = LSTM.predict(teste)[0]
-    qtd_almoco_gb = GB.predict([gb_features])[0]
-    qtd_almoco_mlp = MLP.predict([mlp_features])[0]
-    qtd_almoco_ensemble = (qtd_almoco_gb + qtd_almoco_mlp) / 2
+    qtd_almoco_ensemble = (gb_y_pred + mlp_y_pred) / 2
 
-    st.sidebar.subheader("A quantidade de almoços que será vendido será de:")
-    qtd_almoco_ensemble = str(round(qtd_almoco_ensemble[0]))
-    st.write(qtd_almoco_ensemble)
+    # printa o texto
+    st.sidebar.subheader(f"SERÃO VENDIDOS CERCA DE {int(round(qtd_almoco_ensemble))} ALMOÇOS")
